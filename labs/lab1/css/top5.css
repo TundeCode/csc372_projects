@@ -1,0 +1,35 @@
+body {
+    background-color: black;
+    color: white; 
+    font-family: Arial, sans-serif; 
+    margin: 0; 
+}
+
+h1 {
+    font-family: Georgia, serif;
+}
+
+li {
+    font-family: Helvetica, sans-serif;
+    font-size: 30px;
+}
+
+img {
+    border: 1px solid red;
+    padding: 5px;
+    margin: auto;
+    display:block;
+}
+
+
+.artist {
+    border: 1px solid red;
+    width: 150px;
+}
+
+.spotlight {
+    padding: 10px;
+    border: 3px dotted yellow;
+    width: 300px;
+    text-align: center;
+}
