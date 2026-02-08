@@ -10,6 +10,7 @@ const navLinks = document.querySelectorAll('nav a');
 const contentImages = document.querySelectorAll('main img');
 
 // Select all sections for scroll animations
+const sections = document.querySelectorAll('main section');
 
 // Select the footer for dynamic copyright year
 const footerCopyright = document.querySelector('footer p:first-child');
