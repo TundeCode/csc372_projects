@@ -1,0 +1,430 @@
+/*
+    Name: Aurum Stylesheet
+    Date: February 8, 2026
+    Description: Main stylesheet for Aurum streetwear website. Provides consistent styling
+    across all pages with a bold, playful aesthetic focused on youth expression and creativity.
+    Implements responsive design for mobile-first approach.
+*/
+
+/* ==========================================
+   RESET & BASE STYLES
+   ========================================== */
+
+   * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ==========================================
+   BACKGROUND & BODY
+   Site-wide background applied to all pages
+   ========================================== */
+
+body {
+    background-color: #0A0A0A; /* Deep black background */
+    background-image: 
+        linear-gradient(135deg, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
+        url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23FFD700" fill-opacity="0.02"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v6h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+    font-family: 'Helvetica Neue', Arial, sans-serif; /* Fallback fonts included */
+    color: #FAFAFA;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* ==========================================
+   HEADER SECTION
+   Contains logo and navigation, appears on all pages
+   ========================================== */
+
+header {
+    background-color: rgba(10, 10, 10, 0.95);
+    border-bottom: 3px solid #FFD700; /* Vivid yellow accent */
+    padding: 1.5rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+}
+
+/* AI-assisted suggestion: Used flexbox for header layout to align logo and nav horizontally */
+header > div,
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* Logo Styling */
+header img {
+    max-width: 150px;
+    height: auto;
+    transition: transform 0.3s ease;
+}
+
+header img:hover {
+    transform: scale(1.05);
+}
+
+/* Navigation Bar */
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+nav li {
+    display: inline-block;
+}
+
+/* Navigation Links - Default State */
+nav a {
+    color: #FAFAFA;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+/* Navigation Links - Hover Effect */
+nav a:hover {
+    background-color: #FFD700;
+    color: #0A0A0A;
+    transform: translateY(-2px);
+}
+
+/* Navigation Links - Click/Active Effect */
+nav a:active,
+nav a.active {
+    background-color: #F5C542; /* Slightly darker yellow */
+    color: #0A0A0A;
+    transform: translateY(0);
+}
+
+/* Current/Active Page Link - Different styling */
+nav a[href="index.html"] {
+    background-color: #FFD700;
+    color: #0A0A0A;
+}
+
+/* ==========================================
+   MAIN CONTENT BOX
+   CSS Box Model container for all body content
+   ========================================== */
+
+main {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: rgba(250, 250, 250, 0.02);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    border-radius: 8px;
+    backdrop-filter: blur(5px);
+}
+
+/* ==========================================
+   TYPOGRAPHY
+   Consistent font styling across all pages
+   ========================================== */
+
+/* Main Headlines/Titles */
+h1 {
+    font-family: 'Impact', 'Arial Black', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 3rem;
+    color: #FFD700; /* Vivid yellow for headlines */
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Secondary Headlines */
+h2 {
+    font-family: 'Impact', 'Arial Black', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 2.2rem;
+    color: #FFD700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+}
+
+/* Tertiary Headlines */
+h3 {
+    font-family: 'Arial Black', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 1.5rem;
+    color: #F5C542;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+/* Paragraphs - Consistent across all pages */
+p {
+    font-family: 'Helvetica Neue', Arial, sans-serif; /* Fallback fonts */
+    font-size: 1.1rem;
+    color: #E5E5E5;
+    line-height: 1.8;
+    margin-bottom: 1.25rem;
+    text-align: left;
+}
+
+/* ==========================================
+   IMAGES
+   All images float and have margins for text wrapping
+   ========================================== */
+
+/* Default image styling - floats left with margin */
+img {
+    max-width: 100%;
+    height: auto;
+    float: left;
+    margin: 0 1.5rem 1rem 0; /* Right and bottom margin for text wrap */
+    border-radius: 4px;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+/* AI-assisted suggestion: Added image scaling to never exceed original size */
+img {
+    max-width: 100%;
+    width: auto;
+}
+
+img:hover {
+    transform: scale(1.02);
+    border-color: #FFD700;
+}
+
+/* Center-aligned images option */
+img.center {
+    float: none;
+    display: block;
+    margin: 1rem auto;
+}
+
+/* Right-aligned images option */
+img.right {
+    float: right;
+    margin: 0 0 1rem 1.5rem;
+}
+
+/* ==========================================
+   SECTIONS
+   Styling for content sections
+   ========================================== */
+
+section {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+}
+
+section:last-child {
+    border-bottom: none;
+}
+
+/* Clear floats after sections to prevent layout issues */
+section::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* ==========================================
+   FOOTER
+   Site-wide footer styling
+   ========================================== */
+
+footer {
+    background-color: rgba(10, 10, 10, 0.95);
+    border-top: 3px solid #FFD700;
+    padding: 2rem;
+    text-align: center;
+    margin-top: 3rem;
+}
+
+footer p {
+    color: #A5A5A5;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+footer nav ul {
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+footer nav a {
+    font-size: 0.9rem;
+    padding: 0.3rem 0.8rem;
+}
+
+/* ==========================================
+   RESPONSIVE WEB DESIGN
+   Media queries for mobile/tablet optimization
+   ========================================== */
+
+/* Tablet and smaller screens (max-width: 768px) */
+@media screen and (max-width: 768px) {
+    /* Header adjustments */
+    header {
+        flex-direction: column;
+        text-align: center;
+        padding: 1rem;
+    }
+    
+    header img {
+        max-width: 120px;
+    }
+    
+    /* Navigation stacks vertically */
+    nav ul {
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 100%;
+    }
+    
+    nav a {
+        display: block;
+        width: 100%;
+    }
+    
+    /* Main content box adjustments */
+    main {
+        margin: 1rem;
+        padding: 1.5rem 1rem;
+    }
+    
+    /* Typography scales down */
+    h1 {
+        font-size: 2rem;
+    }
+    
+    h2 {
+        font-size: 1.6rem;
+    }
+    
+    h3 {
+        font-size: 1.2rem;
+    }
+    
+    p {
+        font-size: 1rem;
+    }
+    
+    /* Images center and stack on mobile */
+    img {
+        float: none;
+        display: block;
+        margin: 1rem auto;
+        max-width: 100%;
+    }
+    
+    img.right,
+    img.left {
+        float: none;
+        margin: 1rem auto;
+    }
+}
+
+/* Mobile phones (max-width: 480px) */
+@media screen and (max-width: 480px) {
+    /* Further reduce padding and margins */
+    main {
+        margin: 0.5rem;
+        padding: 1rem 0.75rem;
+    }
+    
+    h1 {
+        font-size: 1.75rem;
+        letter-spacing: 1px;
+    }
+    
+    h2 {
+        font-size: 1.4rem;
+    }
+    
+    p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+    
+    nav ul {
+        gap: 0.3rem;
+    }
+    
+    nav a {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Large screens - prevent content from getting too wide */
+@media screen and (min-width: 1400px) {
+    main {
+        max-width: 1400px;
+    }
+}
+
+/* ==========================================
+   UTILITY CLASSES
+   Reusable helper classes
+   ========================================== */
+
+/* Clear floats utility */
+.clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Text alignment utilities */
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+/* ==========================================
+   ACCESSIBILITY & PRINT STYLES
+   ========================================== */
+
+/* Focus states for keyboard navigation */
+a:focus,
+button:focus {
+    outline: 2px solid #FFD700;
+    outline-offset: 2px;
+}
+
+/* Print-friendly styles */
+@media print {
+    body {
+        background: white;
+        color: black;
+    }
+    
+    header,
+    footer {
+        border-color: #000;
+    }
+    
+    a {
+        text-decoration: underline;
+    }
+}
