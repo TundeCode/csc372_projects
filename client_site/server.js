@@ -1,93 +1,73 @@
-
-
-const http = require("http");
-const fs = require("fs");
+// server.js
+const express = require("express");
+const { engine } = require("express-handlebars");
 const path = require("path");
 
-const PORT = 3000;
-const PUBLIC_DIR = path.join(__dirname, "public");
+const app = express();
 
-// Decide content-type based on extension
-function getContentType(filePath) {
-  const ext = path.extname(filePath).toLowerCase();
-  switch (ext) {
-    case ".html": return "text/html; charset=utf-8";
-    case ".css":  return "text/css; charset=utf-8";
-    case ".js":   return "application/javascript; charset=utf-8";
-    case ".png":  return "image/png";
-    case ".jpg":
-    case ".jpeg": return "image/jpeg";
-    case ".gif":  return "image/gif";
-    case ".svg":  return "image/svg+xml";
-    case ".ico":  return "image/x-icon";
-    default:      return "application/octet-stream";
-  }
-}
+// Handlebars setup
+app.engine(
+  "handlebars",
+  engine({
+    defaultLayout: "main",
+    layoutsDir: path.join(__dirname, "views/layouts"),
+    partialsDir: path.join(__dirname, "views/partials"),
+  })
+);
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "handlebars");
 
-// Required by assignment: serveStaticFile()
-// - 200 success
-// - 500 server error
-// - correct Content-Type
-function serveStaticFile(res, filePath, statusCode = 200) {
-  fs.readFile(filePath, (err, data) => {
-    if (err) {
-      res.writeHead(500, { "Content-Type": "text/plain; charset=utf-8" });
-      res.end("500 - Server Error");
-      return;
-    }
-    res.writeHead(statusCode, { "Content-Type": getContentType(filePath) });
-    res.end(data);
-  });
-}
+// Static files
+app.use(express.static(path.join(__dirname, "public")));
 
-// Normalize URL: remove query, trailing slash, lowercase
-function normalizeUrl(reqUrl) {
-  const noQuery = reqUrl.split("?")[0];
-  const trimmed = noQuery.endsWith("/") && noQuery !== "/" ? noQuery.slice(0, -1) : noQuery;
-  return trimmed.toLowerCase();
-}
+// Port
+const PORT = process.env.PORT || 3000;
 
-const server = http.createServer((req, res) => {
-  const urlPath = normalizeUrl(req.url);
-
-  // Map pretty routes to actual html files in /public
-  // (You can add more routes here if you make more pages)
-  const routes = {
-    "/": "/home.html",
-    "/home": "/home.html",
-    "/shop": "/shop.html",
-    "/faqs": "/faqs.html",
-    "/hotline": "/hotline.html",
-    "/cart": "/cart.html"
+// Helper for dynamic data (1+ per page)
+function baseViewData(req) {
+  return {
+    year: new Date().getFullYear(),
+    path: req.path, // dynamic
   };
+}
 
-  // 1) If it's a known route, serve that HTML file
-  if (routes[urlPath]) {
-    const filePath = path.join(PUBLIC_DIR, routes[urlPath]);
-    return fs.existsSync(filePath)
-      ? serveStaticFile(res, filePath, 200)
-      : serveStaticFile(res, path.join(PUBLIC_DIR, "404.html"), 404);
-  }
+// Routes (each sends dynamic data)
+app.get("/", (req, res) => {
+  res.render("home", { ...baseViewData(req), title: "AURUM - 1800 Drop" });
+});
 
-  // 2) Otherwise, try serving it as a static file (css/js/images/etc.)
-  // Example: /css/styles.css, /js/lookbook.js, /images/foo.png
-  const staticPath = path.join(PUBLIC_DIR, urlPath);
+app.get("/shop", (req, res) => {
+  res.render("shop", { ...baseViewData(req), title: "Shop - AURUM" });
+});
 
-  // prevent path traversal
-  if (!staticPath.startsWith(PUBLIC_DIR)) {
-    return serveStaticFile(res, path.join(PUBLIC_DIR, "404.html"), 404);
-  }
+app.get("/faqs", (req, res) => {
+  res.render("faqs", { ...baseViewData(req), title: "FAQs - AURUM" });
+});
 
-  fs.stat(staticPath, (err, stat) => {
-    if (!err && stat.isFile()) {
-      return serveStaticFile(res, staticPath, 200);
-    }
+app.get("/hotline", (req, res) => {
+  res.render("hotline", { ...baseViewData(req), title: "Hotline - AURUM" });
+});
 
-    // 3) Not found -> serve custom 404 page
-    return serveStaticFile(res, path.join(PUBLIC_DIR, "404.html"), 404);
+app.get("/cart", (req, res) => {
+  res.render("cart", { ...baseViewData(req), title: "Cart - AURUM" });
+});
+
+// 404 catch-all (must be after routes)
+app.use((req, res) => {
+  res.status(404).render("404", { ...baseViewData(req), title: "404 - Page Not Found" });
+});
+
+// 500 error handler (must have 4 params)
+app.use((err, req, res, next) => {
+  console.error("500 error:", err);
+  res.status(500).render("500", {
+    ...baseViewData(req),
+    title: "500 - Server Error",
+    message: "Something went wrong on our end.",
   });
 });
 
-server.listen(PORT, () => {
+// Listen
+app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
