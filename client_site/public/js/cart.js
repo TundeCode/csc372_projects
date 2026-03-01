@@ -7,10 +7,11 @@ document.addEventListener("DOMContentLoaded", () => {
     function renderCart() {
       let cart = JSON.parse(localStorage.getItem("cart")) || [];
       cartItemsEl.innerHTML = "";
+      cartTotalEl.innerHTML = "";
   
       if (cart.length === 0) {
-        cartItemsEl.innerHTML = `<p style="text-align:center; margin: 40px 0;">Your cart is empty.</p>`;
-        cartTotalEl.innerHTML = "";
+        cartItemsEl.innerHTML = `<p class="cart-empty">YOUR CART IS EMPTY</p>
+          <a href="shop.html" class="continue-shopping">CONTINUE SHOPPING</a>`;
         return;
       }
   
@@ -21,33 +22,35 @@ document.addEventListener("DOMContentLoaded", () => {
   
         const itemDiv = document.createElement("div");
         itemDiv.className = "cart-item";
-        itemDiv.style.cssText = "display:flex; justify-content:space-between; align-items:center; padding:16px 0; border-bottom:1px solid #ddd;";
         itemDiv.innerHTML = `
-          <span style="font-weight:600; text-transform:uppercase; letter-spacing:1px;">${item.name}</span>
-          <span>$${item.price.toFixed(2)}</span>
-          <button data-index="${index}" style="background:none; border:1px solid #000; padding:6px 14px; cursor:pointer; font-family:inherit; letter-spacing:1px; font-size:11px;">REMOVE</button>
+          <div class="cart-item-info">
+            <span class="cart-item-name">${item.name}</span>
+            ${item.size ? `<span class="cart-item-size">Size: ${item.size}</span>` : ""}
+          </div>
+          <span class="cart-item-price">$${item.price.toFixed(2)}</span>
+          <button class="remove-btn" data-index="${index}">REMOVE</button>
         `;
         cartItemsEl.appendChild(itemDiv);
       });
   
-      cartTotalEl.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:24px; padding-top:16px; border-top:2px solid #000;">
-          <span style="font-size:20px; letter-spacing:2px;">TOTAL</span>
-          <span style="font-size:20px; font-weight:700;">$${total.toFixed(2)}</span>
-        </div>
-        <button id="checkout-btn" style="display:block; width:100%; margin-top:24px; padding:18px; background:#000; color:#fff; border:none; font-family:inherit; font-size:16px; letter-spacing:3px; cursor:pointer; text-transform:uppercase;">
-          CHECKOUT
-        </button>
-        <button id="clear-cart-btn" style="display:block; width:100%; margin-top:10px; padding:12px; background:transparent; color:#000; border:1px solid #000; font-family:inherit; font-size:13px; letter-spacing:2px; cursor:pointer; text-transform:uppercase;">
-          CLEAR CART
-        </button>
+      cartTotalEl.innerHTML = `TOTAL <span>$${total.toFixed(2)}</span>`;
+  
+      // Inject checkout + clear buttons after total
+      const actionsDiv = document.createElement("div");
+      actionsDiv.id = "cart-actions";
+      actionsDiv.innerHTML = `
+        <button class="checkout-btn" id="checkout-btn">CHECKOUT</button>
+        <button class="clear-cart-btn" id="clear-cart-btn">CLEAR CART</button>
       `;
+      cartTotalEl.after(actionsDiv);
   
       // Remove item
       cartItemsEl.addEventListener("click", (e) => {
-        if (e.target.dataset.index !== undefined) {
+        if (e.target.classList.contains("remove-btn")) {
           cart.splice(Number(e.target.dataset.index), 1);
           localStorage.setItem("cart", JSON.stringify(cart));
+          // Remove stale actions div before re-render
+          document.getElementById("cart-actions")?.remove();
           renderCart();
         }
       });
@@ -55,6 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Clear cart
       document.getElementById("clear-cart-btn").addEventListener("click", () => {
         localStorage.removeItem("cart");
+        document.getElementById("cart-actions")?.remove();
         renderCart();
       });
   
@@ -65,45 +69,43 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   
     function showCheckout(total) {
+      // Remove actions div if present
+      document.getElementById("cart-actions")?.remove();
+      cartTotalEl.innerHTML = "";
+  
       cartItemsEl.innerHTML = `
         <div style="max-width:500px; margin:0 auto;">
-          <h3 style="text-align:center; letter-spacing:3px; margin-bottom:32px;">CHECKOUT</h3>
+          <h3 style="text-align:center; font-family:'Bebas Neue',sans-serif; font-size:32px; letter-spacing:4px; color:var(--gold); margin-bottom:32px;">CHECKOUT</h3>
   
           <div style="margin-bottom:16px;">
-            <label style="display:block; font-size:12px; letter-spacing:2px; margin-bottom:6px;">FULL NAME</label>
-            <input id="co-name" type="text" placeholder="Your Name" style="width:100%; padding:12px; border:1px solid #000; font-family:inherit; font-size:14px; box-sizing:border-box;">
+            <label style="display:block; font-size:12px; letter-spacing:2px; margin-bottom:6px; color:var(--off-white);">FULL NAME</label>
+            <input id="co-name" type="text" placeholder="Your Name" style="width:100%; padding:12px; border:1px solid #444; background:#111; color:var(--off-white); font-family:'Space Mono',monospace; font-size:14px; box-sizing:border-box;">
           </div>
   
           <div style="margin-bottom:16px;">
-            <label style="display:block; font-size:12px; letter-spacing:2px; margin-bottom:6px;">EMAIL</label>
-            <input id="co-email" type="email" placeholder="you@example.com" style="width:100%; padding:12px; border:1px solid #000; font-family:inherit; font-size:14px; box-sizing:border-box;">
+            <label style="display:block; font-size:12px; letter-spacing:2px; margin-bottom:6px; color:var(--off-white);">EMAIL</label>
+            <input id="co-email" type="email" placeholder="you@example.com" style="width:100%; padding:12px; border:1px solid #444; background:#111; color:var(--off-white); font-family:'Space Mono',monospace; font-size:14px; box-sizing:border-box;">
           </div>
   
           <div style="margin-bottom:16px;">
-            <label style="display:block; font-size:12px; letter-spacing:2px; margin-bottom:6px;">SHIPPING ADDRESS</label>
-            <input id="co-address" type="text" placeholder="Street, City, State, ZIP" style="width:100%; padding:12px; border:1px solid #000; font-family:inherit; font-size:14px; box-sizing:border-box;">
+            <label style="display:block; font-size:12px; letter-spacing:2px; margin-bottom:6px; color:var(--off-white);">SHIPPING ADDRESS</label>
+            <input id="co-address" type="text" placeholder="Street, City, State, ZIP" style="width:100%; padding:12px; border:1px solid #444; background:#111; color:var(--off-white); font-family:'Space Mono',monospace; font-size:14px; box-sizing:border-box;">
           </div>
   
           <div style="margin-bottom:24px;">
-            <label style="display:block; font-size:12px; letter-spacing:2px; margin-bottom:6px;">CARD NUMBER (demo only)</label>
-            <input id="co-card" type="text" placeholder="•••• •••• •••• ••••" maxlength="19" style="width:100%; padding:12px; border:1px solid #000; font-family:inherit; font-size:14px; box-sizing:border-box;">
+            <label style="display:block; font-size:12px; letter-spacing:2px; margin-bottom:6px; color:var(--off-white);">CARD NUMBER (demo only)</label>
+            <input id="co-card" type="text" placeholder="•••• •••• •••• ••••" maxlength="19" style="width:100%; padding:12px; border:1px solid #444; background:#111; color:var(--off-white); font-family:'Space Mono',monospace; font-size:14px; box-sizing:border-box;">
           </div>
   
-          <div style="display:flex; justify-content:space-between; margin-bottom:24px; font-size:18px; font-weight:700; letter-spacing:2px; border-top:2px solid #000; padding-top:16px;">
-            <span>ORDER TOTAL</span>
-            <span>$${total.toFixed(2)}</span>
+          <div style="display:flex; justify-content:space-between; margin-bottom:24px; font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:3px; border-top:2px solid #333; padding-top:16px;">
+            <span style="color:var(--off-white);">ORDER TOTAL</span>
+            <span style="color:var(--gold);">$${total.toFixed(2)}</span>
           </div>
   
-          <button id="place-order-btn" style="display:block; width:100%; padding:18px; background:#000; color:#fff; border:none; font-family:inherit; font-size:16px; letter-spacing:3px; cursor:pointer;">
-            PLACE ORDER
-          </button>
-          <button id="back-to-cart-btn" style="display:block; width:100%; margin-top:10px; padding:12px; background:transparent; border:1px solid #000; font-family:inherit; font-size:13px; letter-spacing:2px; cursor:pointer;">
-            ← BACK TO CART
-          </button>
+          <button id="place-order-btn" class="checkout-btn" style="display:block; width:100%;">PLACE ORDER</button>
+          <button id="back-to-cart-btn" class="clear-cart-btn" style="display:block; width:100%; margin-top:10px;">← BACK TO CART</button>
         </div>
       `;
-  
-      cartTotalEl.innerHTML = "";
   
       document.getElementById("back-to-cart-btn").addEventListener("click", renderCart);
   
@@ -118,15 +120,14 @@ document.addEventListener("DOMContentLoaded", () => {
           return;
         }
   
-        // Simulate order placed
         localStorage.removeItem("cart");
         cartItemsEl.innerHTML = `
           <div style="text-align:center; padding:60px 20px;">
-            <div style="font-size:48px; margin-bottom:20px;">✓</div>
-            <h3 style="letter-spacing:4px; margin-bottom:16px;">ORDER PLACED</h3>
-            <p style="letter-spacing:1px; margin-bottom:8px;">Thank you, ${name}.</p>
-            <p style="letter-spacing:1px; margin-bottom:32px;">A confirmation will be sent to ${email}.</p>
-            <a href="shop.html" style="display:inline-block; padding:14px 32px; background:#000; color:#fff; text-decoration:none; letter-spacing:3px; font-size:13px;">KEEP SHOPPING</a>
+            <div style="font-size:64px; color:var(--gold); margin-bottom:20px;">✓</div>
+            <h3 style="font-family:'Bebas Neue',sans-serif; font-size:40px; letter-spacing:4px; color:var(--gold); margin-bottom:16px;">ORDER PLACED</h3>
+            <p style="letter-spacing:1px; margin-bottom:8px; color:var(--off-white);">Thank you, ${name}.</p>
+            <p style="letter-spacing:1px; margin-bottom:32px; color:var(--light-gray);">A confirmation will be sent to ${email}.</p>
+            <a href="shop.html" class="continue-shopping">KEEP SHOPPING</a>
           </div>
         `;
         cartTotalEl.innerHTML = "";
