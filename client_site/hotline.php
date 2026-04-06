@@ -1,6 +1,10 @@
 <?php
 // hotline.php
+<<<<<<< Updated upstream
 // Author: [Your Name]
+=======
+// \
+>>>>>>> Stashed changes
 // Date: April 2026
 // Description: AURUM Hotline contact form. Validates inputs, saves
 //              submissions to the inquiries table (INSERT), and
