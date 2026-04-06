@@ -11,6 +11,7 @@
 -- USE yourcpanelusername_aurum;
 
 -- ============================================================
+-- TABLE 1: products
 -- Purpose: Stores all AURUM merchandise available in the shop.
 -- Supports: shop.php — products are pulled from this table
 --           instead of being hardcoded in PHP.
